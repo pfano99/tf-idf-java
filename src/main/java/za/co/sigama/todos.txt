@@ -1,0 +1,5 @@
+
+## Search for the term = "The brown cow"
+1. eliminate all the document that do not contain the all the term = "The brown cow"
+2.
+
