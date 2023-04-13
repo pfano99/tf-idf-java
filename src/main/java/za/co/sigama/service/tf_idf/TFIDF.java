@@ -45,29 +45,30 @@ public class TFIDF {
 		return (float) Math.log10((double) numDocuments / this.termOccurrenceCount);
 	}
 
-	public float tfidf(String term, List<String> documents) {
-		String document = null;
-		float high = 0;
+	public String tfidf(String term, List<String> corpus) {
 
-		for ( String doc : documents ) {
+//		Document, Frequency
+		Map<String, Float> data = new HashMap<>();
 
+//		Calculating tf - for each document
+		for ( String doc : corpus ) {
 			float frequency = termFrequency(term, doc);
-			System.out.println("frequency = " + frequency);
-//			System.out.println("frequency = " + frequency);
-//			float inverse = inverseDocumentFrequency(documents.size());
-//			System.out.println("inverse = " + inverse);
-//
-//			float res = frequency * inverse;
-//			System.out.println("res = " + res);
-//			if ( res > high ) {
-//				high = res;
-//				document = doc;
-//			}
+			data.put(doc, frequency);
 		}
-		float inverse = inverseDocumentFrequency(documents.size());
-		System.out.println("inverse = " + inverse);
-		System.out.println(document);
+
+//		Calculating idf
+		float inverse = inverseDocumentFrequency(corpus.size());
+
+//		Calculating tf-idf
+		float highest = 0;
+		String document = null;
+		for ( String key : data.keySet() ) {
+			if ( data.get(key) > highest ) {
+				highest = data.get(key);
+				document = key;
+			}
+		}
 		this.termOccurrenceCount = 0;
-		return high;
+		return document;
 	}
 }

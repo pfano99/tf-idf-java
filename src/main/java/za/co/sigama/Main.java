@@ -7,38 +7,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
-	public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
+	public static void main(String[] args) throws ExecutionException, InterruptedException {
 
 		DocumentReader documentReader = new DocumentReader();
 
-		List<String> documents = new ArrayList<>();
+		List<String> documents = documentReader.readAsync(new ArrayList<>(
+						Arrays.asList(
+										".\\docs\\doc1.txt",
+										".\\docs\\doc2.txt"
+						)
+		)).get();
 
-		long startTime = System.nanoTime();
-		documentReader.read(".\\docs\\doc1.txt");
-		documentReader.read(".\\docs\\doc2.txt");
-		documentReader.read(".\\docs\\doc2.txt");
-		documentReader.read(".\\docs\\doc2.txt");
-		long endTime = System.nanoTime();
-		long duration = (endTime - startTime) / 1000000; // duration in milliseconds
-
-		System.out.println("Execution time: " + duration + " ms");
-
-		startTime = System.nanoTime();
-		CompletableFuture<List<String>> listCompletableFuture = documentReader.readAsync(new ArrayList<>(Arrays.asList(".\\docs\\doc1.txt",
-						".\\docs\\doc2.txt", ".\\docs\\doc2.txt", ".\\docs\\doc2.txt")));
-		endTime = System.nanoTime();
-		listCompletableFuture.get();
-		duration = (endTime - startTime) / 1000000; // duration in milliseconds
-
-		System.out.println("Execution time: " + duration + " ms");
-
-//		TFIDF tfidf = new TFIDF();
-//		float tf = tfidf.tfidf("example", documents);
-//		System.out.println("tf = " + tf);
+		TFIDF tfidf = new TFIDF();
+		String document = tfidf.tfidf("sigama", documents);
+		System.out.println("tf = " + document);
 
 	}
 }
